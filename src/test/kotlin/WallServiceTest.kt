@@ -26,5 +26,6 @@ class WallServiceTest {
 
     @org.junit.Test
     fun getAllPosts() {
+
     }
 }
