@@ -22,4 +22,9 @@ class WallServiceTest {
         val exist = WallService.update(post.copy(text = "test text", id = post.id + 1))
         assertFalse(exist)
     }
+
+    @Test
+    fun testMain() {
+       main()
+    }
 }
