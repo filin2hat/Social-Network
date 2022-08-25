@@ -4,4 +4,5 @@ fun main() {
     WallService.add(Post(text = "Hello!", comment = defComment))
     WallService.update(Post(id = 2, text = "Second post!", comment = defComment))
     WallService.getAllPosts()
+
 }
