@@ -6,5 +6,5 @@ data class Post(
     val ownerID: Int = 0,
     val date: LocalDate = LocalDate.now(),
     val text: String = "text",
-    val comment: Comments
+    val comment: Comments?
 )
