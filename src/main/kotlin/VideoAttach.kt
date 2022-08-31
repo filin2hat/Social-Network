@@ -1,0 +1,1 @@
+data class VideoAttach(val video: Video)

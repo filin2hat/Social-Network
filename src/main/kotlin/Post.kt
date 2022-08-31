@@ -1,5 +1,3 @@
-package classes
-
 import java.time.LocalDate
 
 data class Post(

@@ -1,2 +1,3 @@
-interface Attachment {
+public interface Attachment {
+    val type: String
 }
