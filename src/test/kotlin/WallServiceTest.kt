@@ -27,6 +27,6 @@ class WallServiceTest {
 
     @Test
     fun testMain() {
-       main()
+        main()
     }
 }
