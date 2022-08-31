@@ -1,3 +1,8 @@
+package services
+
+import classes.Post
+import defComment
+
 object WallService {
     private var posts = emptyArray<Post>()
     private var lastID = 0

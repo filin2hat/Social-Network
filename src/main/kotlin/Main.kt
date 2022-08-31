@@ -1,3 +1,6 @@
+import classes.*
+import services.*
+
 val defComment = Comments()
 fun main() {
     WallService.add(Post(text = "First post!", comment = null))
