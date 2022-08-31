@@ -1,4 +1,6 @@
-import services.*
+import classes.Comments
+import classes.Post
+import services.WallService
 
 val defComment = Comments()
 fun main() {

@@ -1,1 +1,0 @@
-data class DocumentAttach(val document: Document)

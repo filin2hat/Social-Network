@@ -1,3 +1,5 @@
+package classes
+
 data class Video(
     val id: Int,
     val albumId: Int,

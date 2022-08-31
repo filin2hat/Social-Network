@@ -1,3 +1,5 @@
+package classes
+
 data class Picture(
     val id: Int,
     val albumId: Int,

@@ -1,6 +1,6 @@
 package services
 
-import Post
+import classes.Post
 import defComment
 
 object WallService {
