@@ -1,10 +1,22 @@
 package services
 
-import classes.Post
+import classes.*
+import exceptions.*
 
 object WallService {
     private var posts = emptyArray<Post>()
+    private var comments = emptyArray<Comments>()
     private var lastID = 0
+
+    fun createComment(postId: Int, comment: Comments): Comments {
+        for (post in posts) {
+            if (postId == post.id) {
+                comments += comment
+                return comments.last()
+            }
+        }
+        throw PostNotFoundException()
+    }
 
     fun add(post: Post): Post {
         posts += post.copy(id = setID())
