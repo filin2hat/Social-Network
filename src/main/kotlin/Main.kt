@@ -15,6 +15,8 @@ fun main() {
             ), comment = Comments(3)
         )
     )
+    WallService.createComment(1, Comments())
+
     WallService.getAllPosts()
 
 
