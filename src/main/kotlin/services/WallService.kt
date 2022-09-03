@@ -1,9 +1,13 @@
+package services
+
+import classes.Post
+
 object WallService {
     private var posts = emptyArray<Post>()
     private var lastID = 0
 
     fun add(post: Post): Post {
-        posts += post.copy(id = setID(), comment = defComment)
+        posts += post.copy(id = setID())
         return posts.last()
     }
 
@@ -24,13 +28,20 @@ object WallService {
 
     fun getAllPosts() {
         for (post in posts) {
-            val (id, _, _, _, text) = post
+            val (id, _, _, _, text, _, attach) = post
             println(
                 """
             ID = $id
             TEXT = $text
+            ATTACHMENT = $attach
             """.trimIndent()
             )
+        }
+    }
+
+    fun printAll() {
+        for (post in posts) {
+            println(post)
         }
     }
 }

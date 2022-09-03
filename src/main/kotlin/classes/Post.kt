@@ -1,3 +1,6 @@
+package classes
+
+import interfaces.Attachment
 import java.time.LocalDate
 
 data class Post(
@@ -6,5 +9,6 @@ data class Post(
     val ownerID: Int = 0,
     val date: LocalDate = LocalDate.now(),
     val text: String = "text",
-    val comment: Comments?
+    val comment: Comments? = Comments(),
+    var attach: Array<Attachment>?
 )
