@@ -1,10 +1,43 @@
 package services
 
+import classes.Comments
 import classes.Post
+import classes.Report
+import exceptions.CommentNotFoundException
+import exceptions.PostNotFoundException
+import exceptions.UnknownReasonException
 
 object WallService {
     private var posts = emptyArray<Post>()
+    private var comments = emptyArray<Comments>()
+    private var reports = emptyArray<Report>()
     private var lastID = 0
+
+    fun addReport(postId: Int, commentId: Int, report: Report): Report {
+        if (report.reason!! < 0 || report.reason > 6) throw UnknownReasonException()
+        for (post in posts) {
+            if (postId == post.id) {
+                for (comment in comments) {
+                    if (commentId ==comment.id) {
+                        reports += report
+                        return reports.last()
+                    }
+                }
+                throw CommentNotFoundException()
+            }
+        }
+        throw PostNotFoundException()
+    }
+
+    fun createComment(postId: Int, comment: Comments): Comments {
+        for (post in posts) {
+            if (postId == post.id) {
+                comments += comment
+                return comments.last()
+            }
+        }
+        throw PostNotFoundException()
+    }
 
     fun add(post: Post): Post {
         posts += post.copy(id = setID())
