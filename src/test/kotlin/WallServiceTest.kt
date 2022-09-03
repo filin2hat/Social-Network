@@ -1,6 +1,9 @@
 import classes.Comments
 import classes.Post
+import classes.Report
+import exceptions.CommentNotFoundException
 import exceptions.PostNotFoundException
+import exceptions.UnknownReasonException
 import org.junit.Assert.*
 import org.junit.Test
 import services.WallService
@@ -9,6 +12,42 @@ import services.WallService.getAllPosts
 import services.WallService.printAll
 
 class WallServiceTest {
+
+    @Test
+    fun reportShouldNotThrow() {
+        val post = WallService.add(Post(attach = null))
+        val comment = Comments()
+        createComment(post.id, comment)
+        val report = Report(1, comment.id, 1)
+        WallService.addReport(1, comment.id, report)
+    }
+
+    @Test(expected = UnknownReasonException::class)
+    fun reportUnknownReasonException() {
+        val post = WallService.add(Post(attach = null))
+        val comment = Comments()
+        createComment(post.id, comment)
+        val report = Report(1, comment.id, -1)
+        WallService.addReport(1, comment.id, report)
+    }
+
+    @Test(expected = CommentNotFoundException::class)
+    fun reportCommentNotFoundException() {
+        val post = WallService.add(Post(attach = null))
+        val comment = Comments()
+        createComment(post.id, comment)
+        val report = Report(1, comment.id, 1)
+        WallService.addReport(1, comment.id - 1, report)
+    }
+
+    @Test(expected = PostNotFoundException::class)
+    fun reportPostNotFoundException() {
+        val post = WallService.add(Post(attach = null))
+        val comment = Comments()
+        createComment(post.id, comment)
+        val report = Report(1, comment.id, 1)
+        WallService.addReport(1 - 1, comment.id, report)
+    }
 
     @Test(expected = PostNotFoundException::class)
     fun commentShouldThrow() {

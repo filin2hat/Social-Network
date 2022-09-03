@@ -18,8 +18,10 @@ object WallService {
         for (post in posts) {
             if (postId == post.id) {
                 for (comment in comments) {
-                    reports += report
-                    return reports.last()
+                    if (commentId ==comment.id) {
+                        reports += report
+                        return reports.last()
+                    }
                 }
                 throw CommentNotFoundException()
             }
