@@ -6,9 +6,10 @@ import classes.Report
 import exceptions.CommentNotFoundException
 import exceptions.PostNotFoundException
 import exceptions.UnknownReasonException
+import interfaces.CrudService
 
-object WallService {
-    private var posts = emptyArray<Post>()
+object WallService : CrudService<Post> {
+    private var posts = mutableListOf<Post>()
     private var comments = emptyArray<Comments>()
     private var reports = emptyArray<Report>()
     private var lastID = 0
@@ -18,7 +19,7 @@ object WallService {
         for (post in posts) {
             if (postId == post.id) {
                 for (comment in comments) {
-                    if (commentId ==comment.id) {
+                    if (commentId == comment.id) {
                         reports += report
                         return reports.last()
                     }
@@ -39,12 +40,12 @@ object WallService {
         throw PostNotFoundException()
     }
 
-    fun add(post: Post): Post {
+    override fun add(post: Post): Post {
         posts += post.copy(id = setID())
         return posts.last()
     }
 
-    fun update(post: Post): Boolean {
+    override fun update(post: Post): Boolean {
         for ((index, target) in posts.withIndex()) {
             if (target.id == post.id) {
                 posts[index] = post.copy(id = target.id, ownerID = target.ownerID, date = target.date)
@@ -76,5 +77,15 @@ object WallService {
         for (post in posts) {
             println(post)
         }
+    }
+
+    override fun delete(post: Post): Boolean {
+        for ((index, target) in posts.withIndex()) {
+            if (target.id == post.id) {
+                posts.removeAt(index)
+                return true
+            }
+        }
+        return false
     }
 }
