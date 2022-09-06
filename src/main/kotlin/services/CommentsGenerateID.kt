@@ -1,6 +1,6 @@
 package services
 
-class CommentsGenerateID {
+object CommentsGenerateID {
     private var lastId: Int = 0
 
     fun getId(): Int {

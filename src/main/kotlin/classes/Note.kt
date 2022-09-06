@@ -10,6 +10,6 @@ data class Note(
     val privacy: Boolean = true,
     val commentPrivacy: Boolean = true,
     val date: LocalDate = LocalDate.now(),
-    val isDelete: Boolean = false,
+    var isDelete: Boolean = false,
     val comments: MutableList<Comments> = mutableListOf()
 )
