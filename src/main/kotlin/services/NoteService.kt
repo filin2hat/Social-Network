@@ -100,6 +100,14 @@ object NoteService : CrudService<Note> {
         throw NoteNotFoundException()
     }
 
+    //Возвращает список комментариев к заметке.
+    fun getComments(noteId: Int): MutableList<Comments> {
+        for (note in notes) {
+            if (note.id == noteId && !note.isDelete) return note.comments
+        }
+        throw NoteNotFoundException()
+    }
+
     //Восстанавливает удалённый комментарий.
     fun restoreComment(noteId: Int, commentId: Int): Boolean {
         for (note in notes) {
