@@ -3,7 +3,7 @@ import services.WallService
 
 fun main() {
     val post1 = Post(text = "First post!", comment = null, attach = null)
-    val post2 = Post(text = "Hello!", comment = Comments(), attach = null)
+    val post2 = Post(text = "Hello!", comment = null, attach = null)
     WallService.add(post1)
     WallService.add(post2)
     WallService.update(
@@ -19,6 +19,6 @@ fun main() {
     )
     WallService.createComment(1, Comments())
     WallService.addReport(1, 0, Report(reason = 1))
-    WallService.delete(post1)
-    WallService.getAllPosts()
+    println(WallService.delete(post1))
+    WallService.printAll()
 }

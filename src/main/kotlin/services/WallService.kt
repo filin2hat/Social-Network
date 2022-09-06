@@ -10,8 +10,8 @@ import interfaces.CrudService
 
 object WallService : CrudService<Post> {
     private var posts = mutableListOf<Post>()
-    private var comments = emptyArray<Comments>()
-    private var reports = emptyArray<Report>()
+    private var comments = mutableListOf<Comments>()
+    private var reports = mutableListOf<Report>()
     private var lastID = 0
 
     fun addReport(postId: Int, commentId: Int, report: Report): Report {
@@ -41,7 +41,7 @@ object WallService : CrudService<Post> {
     }
 
     override fun add(post: Post): Post {
-        posts += post.copy(id = setID())
+        posts += post.copy(id = getId())
         return posts.last()
     }
 
@@ -55,7 +55,7 @@ object WallService : CrudService<Post> {
         return false
     }
 
-    private fun setID(): Int {
+    private fun getId(): Int {
         lastID += 1
         return lastID
     }
@@ -80,9 +80,9 @@ object WallService : CrudService<Post> {
     }
 
     override fun delete(post: Post): Boolean {
-        for ((index, target) in posts.withIndex()) {
-            if (target.id == post.id) {
-                posts.removeAt(index)
+        for (target in posts) {
+            if (post.id == target.id) {
+                posts.remove(target)
                 return true
             }
         }

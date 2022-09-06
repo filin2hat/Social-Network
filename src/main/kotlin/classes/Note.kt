@@ -9,8 +9,6 @@ data class Note (
     val text: String = "text",
     val privacy: Boolean = true,
     val commentPrivacy: Boolean = true,
-    val privacyView: String,
-    val privacyComment: String,
     val date: LocalDate = LocalDate.now(),
     val isDelete: Boolean = false,
     val comments: MutableList<Comments> = mutableListOf()
