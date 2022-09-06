@@ -1,4 +1,3 @@
 package exceptions
 
-class UnknownReasonException : RuntimeException ("Unknown reason.") {
-}
+class UnknownReasonException : RuntimeException("Unknown reason.")

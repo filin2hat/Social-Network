@@ -2,7 +2,7 @@ package classes
 
 import java.time.LocalDate
 
-data class Note (
+data class Note(
     val id: Int = 0,
     val ownerId: Int = 0,
     val title: String = "title",

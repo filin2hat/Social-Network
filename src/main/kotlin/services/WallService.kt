@@ -9,9 +9,9 @@ import exceptions.UnknownReasonException
 import interfaces.CrudService
 
 object WallService : CrudService<Post> {
-    private var posts = mutableListOf<Post>()
-    private var comments = mutableListOf<Comments>()
-    private var reports = mutableListOf<Report>()
+    private val posts = mutableListOf<Post>()
+    private val comments = mutableListOf<Comments>()
+    private val reports = mutableListOf<Report>()
     private var lastID = 0
 
     fun addReport(postId: Int, commentId: Int, report: Report): Report {
@@ -73,12 +73,6 @@ object WallService : CrudService<Post> {
         }
     }
 
-    fun printAll() {
-        for (post in posts) {
-            println(post)
-        }
-    }
-
     override fun delete(post: Post): Boolean {
         for (target in posts) {
             if (post.id == target.id) {
@@ -86,6 +80,14 @@ object WallService : CrudService<Post> {
                 return true
             }
         }
-        return false
+        throw PostNotFoundException()
+    }
+
+    override fun print(elem: Post): Boolean {
+        for (post in posts) {
+            println(post)
+            return true
+        }
+        throw PostNotFoundException()
     }
 }

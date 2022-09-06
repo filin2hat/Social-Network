@@ -6,4 +6,6 @@ interface CrudService<T> {
     fun update(elem: T): Boolean
 
     fun delete(elem: T): Boolean
+
+    fun print(elem: T): Boolean
 }
