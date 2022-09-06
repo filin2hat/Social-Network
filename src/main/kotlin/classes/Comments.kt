@@ -5,6 +5,7 @@ import java.time.LocalDate
 
 data class Comments(
     val id: Int = 0,
+    val ownerId: Int = 0,
     val text: String = "simple text",
     val count: Int = 0,
     val canPost: Boolean = false,
