@@ -10,7 +10,7 @@ import interfaces.CrudService
 
 object WallService : CrudService<Post> {
     private val posts = mutableListOf<Post>()
-    private val comments = mutableListOf<Comments>()
+    val comments = mutableListOf<Comments>()
     private val reports = mutableListOf<Report>()
     private var lastID = 0
 

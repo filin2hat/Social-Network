@@ -73,13 +73,12 @@ object NoteService : CrudService<Note> {
     }
 
     // Редактирует указанный комментарий у заметки.
-    fun editComment(noteId: Int, commentId: Int, comments: Comments): Boolean {
+    fun editComment(noteId: Int, commentId: Int, editComment: Comments): Boolean {
         for (note in notes) {
             if (note.id == noteId && !note.isDelete) {
                 for ((index, targetComment) in note.comments.withIndex()) {
-                    if (targetComment.id == commentId && !comments.isDelete) {
-                        notes[index] =
-                            note.copy(id = targetComment.id, date = targetComment.date, ownerId = targetComment.ownerId)
+                    if (targetComment.id == commentId && !targetComment.isDelete) {
+                        notes[index].comments[commentId-1] = editComment
                         return true
                     }
                 }

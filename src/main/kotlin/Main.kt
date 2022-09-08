@@ -1,12 +1,16 @@
 import classes.*
 import services.NoteService
-import services.WallService
 
 fun main() {
     val note = NoteService.add(Note(text = "press button"))
-    NoteService.addComment(1, Comments())
+    NoteService.addComment(1, Comments(text = "FIRST COMMENT"))
+    val editComment = Comments(text = "EDIT COMMENT")
 
-    println(note.isDelete)
-    val result1 = NoteService.delete(note)
-    println(note.isDelete)
+    NoteService.print(note)
+    NoteService.editComment(1, 1, editComment)
+    //println(note.isDelete)
+    //NoteService.delete(note)
+    //println(note.isDelete)
+    NoteService.print(note)
+
 }

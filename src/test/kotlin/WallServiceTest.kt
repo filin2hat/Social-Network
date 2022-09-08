@@ -9,7 +9,7 @@ import org.junit.Test
 import services.WallService
 import services.WallService.createComment
 import services.WallService.getAllPosts
-import services.WallService.printAll
+
 
 class WallServiceTest {
 
@@ -81,11 +81,6 @@ class WallServiceTest {
         val post = WallService.add(Post(attach = null))
         val exist = WallService.update(post.copy(text = "test text", id = post.id + 1))
         assertFalse(exist)
-    }
-
-    @Test
-    fun testPrintAll() {
-        printAll()
     }
 
     @Test
