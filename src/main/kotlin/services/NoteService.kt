@@ -40,6 +40,16 @@ object NoteService : CrudService<Note> {
         throw NoteNotFoundException()
     }
 
+    fun restore(note: Note): Boolean {
+        for (target in notes) {
+            if (note.id == target.id && note.isDelete) {
+                note.isDelete = false
+                return true
+            }
+        }
+        throw NoteNotFoundException()
+    }
+
     override fun print(note: Note): Boolean {
         for (target in notes) {
             println(target)
@@ -64,6 +74,7 @@ object NoteService : CrudService<Note> {
                 for (comment in note.comments) {
                     if (comment.id == commentId && !comment.isDelete) {
                         comment.isDelete = true
+                        return true
                     }
                 }
                 throw CommentNotFoundException()
@@ -78,7 +89,7 @@ object NoteService : CrudService<Note> {
             if (note.id == noteId && !note.isDelete) {
                 for ((index, targetComment) in note.comments.withIndex()) {
                     if (targetComment.id == commentId && !targetComment.isDelete) {
-                        notes[index].comments[commentId-1] = editComment
+                        notes[index].comments[commentId - 1] = editComment
                         return true
                     }
                 }
@@ -114,6 +125,7 @@ object NoteService : CrudService<Note> {
                 for (comment in note.comments) {
                     if (comment.id == commentId && comment.isDelete) {
                         comment.isDelete = false
+                        return true
                     }
                 }
                 throw CommentNotFoundException()
