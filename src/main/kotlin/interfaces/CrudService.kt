@@ -1,7 +1,5 @@
 package interfaces
 
-import classes.Post
-
 interface CrudService<T> {
     fun add(elem: T?): T
 

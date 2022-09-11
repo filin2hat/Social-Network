@@ -1,3 +1,5 @@
+@file:Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
+
 package services
 
 import classes.Comments
@@ -56,9 +58,7 @@ object NoteService : CrudService<Note> {
     override fun print(note: Note) {
         for (target in notes) {
             println(target)
-
         }
-
     }
 
     fun addComment(noteId: Int, comments: Comments): Comments {
@@ -87,12 +87,16 @@ object NoteService : CrudService<Note> {
     }
 
     // Редактирует указанный комментарий у заметки.
-    fun editComment(noteId: Int, commentId: Int, editComment: Comments): Boolean {
+    fun editComment(noteId: Int, commentId: Int, comment: Comments): Boolean {
         for (note in notes) {
             if (note.id == noteId && !note.isDelete) {
-                for ((index, targetComment) in note.comments.withIndex()) {
-                    if (targetComment.id == commentId && !targetComment.isDelete) {
-                        notes[index].comments[commentId - 1] = editComment
+                for ((index, thisComment) in note.comments.withIndex()) {
+                    if (thisComment.id == commentId && !comment.isDelete) {
+                        notes[index] = note.copy(
+                            id = thisComment.id,
+                            ownerId = thisComment.ownerId,
+                            date = thisComment.date
+                        )
                         return true
                     }
                 }
