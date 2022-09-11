@@ -1,5 +1,7 @@
 package services
 
+import classes.Note
+import classes.Post
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -7,7 +9,9 @@ import org.junit.Assert.*
 class NoteServiceTest {
 
     @Test
-    fun add() {
+    fun addPostNotThrow() {
+        val note = NoteService.add(Note())
+        assertNotEquals(0, note.id)
     }
 
     @Test
