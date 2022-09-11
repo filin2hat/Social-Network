@@ -15,9 +15,12 @@ object NoteService : CrudService<Note> {
         return lastID
     }
 
-    override fun add(note: Note): Note {
-        notes += note.copy(id = getId())
-        return notes.last()
+    override fun add(note: Note?): Note {
+        if (note != null) {
+            notes += note.copy(id = getId())
+            return notes.last()
+        }
+        throw NoteNotFoundException()
     }
 
     override fun update(note: Note): Boolean {
@@ -50,12 +53,12 @@ object NoteService : CrudService<Note> {
         throw NoteNotFoundException()
     }
 
-    override fun print(note: Note): Boolean {
+    override fun print(note: Note) {
         for (target in notes) {
             println(target)
-            return true
+
         }
-        throw NoteNotFoundException()
+
     }
 
     fun addComment(noteId: Int, comments: Comments): Comments {

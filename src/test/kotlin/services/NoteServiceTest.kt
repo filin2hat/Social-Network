@@ -19,6 +19,10 @@ class NoteServiceTest {
     }
 
     @Test
+    fun restore() {
+    }
+
+    @Test
     fun print() {
     }
 

@@ -40,9 +40,12 @@ object WallService : CrudService<Post> {
         throw PostNotFoundException()
     }
 
-    override fun add(post: Post): Post {
-        posts += post.copy(id = getId())
-        return posts.last()
+    override fun add(post: Post?): Post {
+        if (post != null) {
+            posts += post.copy(id = getId())
+            return posts.last()
+        }
+        throw PostNotFoundException()
     }
 
     override fun update(post: Post): Boolean {
@@ -83,11 +86,12 @@ object WallService : CrudService<Post> {
         throw PostNotFoundException()
     }
 
-    override fun print(elem: Post): Boolean {
+    override fun print(elem: Post) {
         for (post in posts) {
             println(post)
-            return true
         }
-        throw PostNotFoundException()
+
     }
+
+
 }
