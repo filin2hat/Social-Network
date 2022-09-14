@@ -6,11 +6,12 @@ import classes.Report
 import exceptions.CommentNotFoundException
 import exceptions.PostNotFoundException
 import exceptions.UnknownReasonException
+import interfaces.CrudService
 
-object WallService {
-    private var posts = emptyArray<Post>()
-    private var comments = emptyArray<Comments>()
-    private var reports = emptyArray<Report>()
+object WallService : CrudService<Post> {
+    private val posts = mutableListOf<Post>()
+    private val comments = mutableListOf<Comments>()
+    private val reports = mutableListOf<Report>()
     private var lastID = 0
 
     fun addReport(postId: Int, commentId: Int, report: Report): Report {
@@ -18,7 +19,7 @@ object WallService {
         for (post in posts) {
             if (postId == post.id) {
                 for (comment in comments) {
-                    if (commentId ==comment.id) {
+                    if (commentId == comment.id) {
                         reports += report
                         return reports.last()
                     }
@@ -39,12 +40,15 @@ object WallService {
         throw PostNotFoundException()
     }
 
-    fun add(post: Post): Post {
-        posts += post.copy(id = setID())
-        return posts.last()
+    override fun add(post: Post?): Post {
+        if (post != null) {
+            posts += post.copy(id = getId())
+            return posts.last()
+        }
+        throw PostNotFoundException()
     }
 
-    fun update(post: Post): Boolean {
+    override fun update(post: Post): Boolean {
         for ((index, target) in posts.withIndex()) {
             if (target.id == post.id) {
                 posts[index] = post.copy(id = target.id, ownerID = target.ownerID, date = target.date)
@@ -54,7 +58,7 @@ object WallService {
         return false
     }
 
-    private fun setID(): Int {
+    private fun getId(): Int {
         lastID += 1
         return lastID
     }
@@ -72,9 +76,22 @@ object WallService {
         }
     }
 
-    fun printAll() {
+    override fun delete(post: Post): Boolean {
+        for (target in posts) {
+            if (post.id == target.id) {
+                posts.remove(target)
+                return true
+            }
+        }
+        throw PostNotFoundException()
+    }
+
+    override fun print(elem: Post) {
         for (post in posts) {
             println(post)
         }
+
     }
+
+
 }

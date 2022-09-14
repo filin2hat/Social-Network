@@ -1,4 +1,3 @@
 package exceptions
 
-class PostNotFoundException : RuntimeException ("Post not found!") {
-}
+class PostNotFoundException : RuntimeException("Post not found!")

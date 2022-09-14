@@ -1,3 +1,5 @@
+package services
+
 import classes.Comments
 import classes.Post
 import classes.Report
@@ -6,16 +8,15 @@ import exceptions.PostNotFoundException
 import exceptions.UnknownReasonException
 import org.junit.Assert.*
 import org.junit.Test
-import services.WallService
 import services.WallService.createComment
 import services.WallService.getAllPosts
-import services.WallService.printAll
+
 
 class WallServiceTest {
 
     @Test
     fun reportShouldNotThrow() {
-        val post = WallService.add(Post(attach = null))
+        val post = WallService.add(Post())
         val comment = Comments()
         createComment(post.id, comment)
         val report = Report(1, comment.id, 1)
@@ -24,7 +25,7 @@ class WallServiceTest {
 
     @Test(expected = UnknownReasonException::class)
     fun reportUnknownReasonException() {
-        val post = WallService.add(Post(attach = null))
+        val post = WallService.add(Post())
         val comment = Comments()
         createComment(post.id, comment)
         val report = Report(1, comment.id, -1)
@@ -33,7 +34,7 @@ class WallServiceTest {
 
     @Test(expected = CommentNotFoundException::class)
     fun reportCommentNotFoundException() {
-        val post = WallService.add(Post(attach = null))
+        val post = WallService.add(Post())
         val comment = Comments()
         createComment(post.id, comment)
         val report = Report(1, comment.id, 1)
@@ -42,7 +43,7 @@ class WallServiceTest {
 
     @Test(expected = PostNotFoundException::class)
     fun reportPostNotFoundException() {
-        val post = WallService.add(Post(attach = null))
+        val post = WallService.add(Post())
         val comment = Comments()
         createComment(post.id, comment)
         val report = Report(1, comment.id, 1)
@@ -51,7 +52,7 @@ class WallServiceTest {
 
     @Test(expected = PostNotFoundException::class)
     fun commentShouldThrow() {
-        val post = WallService.add(Post(attach = null))
+        val post = WallService.add(Post())
         val falseId = post.id + 1
         createComment(falseId, Comments())
     }
@@ -64,37 +65,54 @@ class WallServiceTest {
     }
 
     @Test
-    fun addPost() {
-        val post = WallService.add(Post(attach = null))
+    fun addPostNotThrow() {
+        val post = WallService.add(Post())
         assertNotEquals(0, post.id)
     }
 
+    @Test(expected = PostNotFoundException::class)
+    fun addPostThrowPostNotFound() {
+        WallService.add(null)
+    }
+
+
     @Test
     fun updatePost() {
-        val post = WallService.add(Post(attach = null))
+        val post = WallService.add(Post())
         val exist = WallService.update(post.copy(text = "test text"))
         assertTrue(exist)
     }
 
     @Test
     fun notUpdatePost() {
-        val post = WallService.add(Post(attach = null))
+        val post = WallService.add(Post())
         val exist = WallService.update(post.copy(text = "test text", id = post.id + 1))
         assertFalse(exist)
     }
 
     @Test
-    fun testPrintAll() {
-        printAll()
-    }
-
-    @Test
-    fun testGetAllPosts() {
+    fun testGetAllPost() {
         getAllPosts()
     }
 
     @Test
-    fun testMain() {
-        main()
+    fun printPostTrue() {
+        val post = WallService.add(Post())
+        WallService.print(post)
+        }
+
+
+
+
+    @Test(expected = PostNotFoundException::class)
+    fun deletePostThrowPostNotFound() {
+        WallService.delete(Post(11))
+    }
+
+
+    @Test()
+    fun deletePostNotThrow() {
+        val post = WallService.add(Post())
+        WallService.delete(post)
     }
 }

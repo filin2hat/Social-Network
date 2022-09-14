@@ -1,4 +1,3 @@
 package exceptions
 
-class CommentNotFoundException : RuntimeException ("Comment not found!") {
-}
+class CommentNotFoundException : RuntimeException("Comment not found!")

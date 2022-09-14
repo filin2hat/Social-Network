@@ -10,5 +10,5 @@ data class Post(
     val date: LocalDate = LocalDate.now(),
     val text: String = "text",
     val comment: Comments? = Comments(),
-    var attach: Array<Attachment>?
+    var attach: MutableList<Attachment> = mutableListOf<Attachment>()
 )
