@@ -2,8 +2,7 @@ package services
 
 import classes.Chat
 import classes.Message
-import exceptions.ChatNotFoundException
-import exceptions.MessageNotFoundException
+import exceptions.*
 
 object ChatService {
     private val chats = mutableListOf<Chat>()

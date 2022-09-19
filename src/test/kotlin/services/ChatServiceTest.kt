@@ -25,6 +25,16 @@ class ChatServiceTest {
     }
 
     @Test
+    fun returnChat() {
+        val user1 = UserService.add(User("Ivan", "Ivanov", 20))
+        val user2 = UserService.add(User("Lena", "Petrova", 19))
+        val text = "Hi"
+        ChatService.addChat(user1.id, Chat(user1.id, user2.id), Message(user1.id, user2.id, text))
+        val result  = ChatService.addChat(user1.id, Chat(user1.id, user2.id), Message(user1.id, user2.id, text))
+        assertEquals(1 , result.id)
+    }
+
+    @Test
     fun addMassageNoZero() {
         val user1 = UserService.add(User("Ivan", "Ivanov", 20))
         val user2 = UserService.add(User("Lena", "Petrova", 19))
