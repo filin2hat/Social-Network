@@ -23,7 +23,7 @@ object ChatService {
         return result
     }
 
-    private fun getUsersChats(userId: Int) =
+    fun getUsersChats(userId: Int) =
         chats.filter { (it.userId1 == userId || it.userId2 == userId) && it.messages.isNotEmpty() && !it.messages.last().isRead }
 
     fun addChat(userId: Int, newChat: Chat, message: Message): Chat {
@@ -43,10 +43,10 @@ object ChatService {
 
     fun deleteChat(userId: Int, chatId: Int): Boolean {
         val usersChat = getUsersChats(userId)
-        for (chat in usersChat) {
+        for (chat in ArrayList(usersChat)) {
             if (chat.id == chatId) {
                 if (chat.messages.isNotEmpty()) {
-                    for (message in chat.messages) {
+                    for (message in ArrayList(chat.messages)) {
                         chat.messages.remove(message)
                     }
                 }
