@@ -16,7 +16,7 @@ object ChatService {
         messageId = GenerateID()
     }
 
-    private fun getChats(userId: Int): List<Chat> {
+    fun getChats(userId: Int): List<Chat> {
         val result =
             chats.filter { it.userId1 == userId || it.userId2 == userId }
         if (result.isEmpty()) throw ChatNotFoundException()
