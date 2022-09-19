@@ -1,22 +1,16 @@
-import classes.Comments
-import classes.Note
-import services.NoteService
+import classes.Chat
+import classes.Message
+import classes.User
+import services.ChatService
+import services.UserService
 
 fun main() {
-    val note = NoteService.add(Note(text = "press button"))
-    val editComment = Comments(id = 1, text = "EDIT COMMENT")
+    val user1 = UserService.add(User("Petya", "Petrov", 28))
+    val user2 = UserService.add(User("Lena", "Ivanova", 23))
 
-    NoteService.addComment(1, Comments(text = "FIRST COMMENT"))
-    NoteService.print(note)
-    NoteService.editComment(1, 1, editComment)
-    NoteService.print(note)
-    NoteService.deleteComment(1, 1)
-    NoteService.print(note)
-    NoteService.restoreComment(1, 1)
-    NoteService.print(note)
-    NoteService.delete(note)
-    NoteService.print(note)
-    NoteService.restore(note)
-    NoteService.print(note)
-
+    val text = "Hi!"
+    val chat = ChatService.addChat(user1.id, Chat(user1.id, user2.id), Message(user1.id, user2.id, text))
+    println (ChatService.getUnreadChatsCount(user2.id))
+    println(ChatService.getChats(user1.id))
 }
+
