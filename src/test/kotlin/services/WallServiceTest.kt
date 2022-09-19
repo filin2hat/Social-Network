@@ -57,7 +57,7 @@ class WallServiceTest {
         createComment(falseId, Comments())
     }
 
-    @Test()
+    @Test
     fun commentShouldNotThrow() {
         val comment = Comments()
         val returnComment = createComment(1, Comments())
@@ -110,7 +110,7 @@ class WallServiceTest {
     }
 
 
-    @Test()
+    @Test
     fun deletePostNotThrow() {
         val post = WallService.add(Post())
         WallService.delete(post)

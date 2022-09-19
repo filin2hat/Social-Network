@@ -12,7 +12,7 @@ object WallService : CrudService<Post> {
     private val posts = mutableListOf<Post>()
     private val comments = mutableListOf<Comments>()
     private val reports = mutableListOf<Report>()
-    private var lastID = 0
+    private var lastID = GenerateID()
 
     fun addReport(postId: Int, commentId: Int, report: Report): Report {
         if (report.reason!! < 0 || report.reason > 6) throw UnknownReasonException()
@@ -40,28 +40,28 @@ object WallService : CrudService<Post> {
         throw PostNotFoundException()
     }
 
-    override fun add(post: Post?): Post {
-        if (post != null) {
-            posts += post.copy(id = getId())
+    override fun add(elem: Post?): Post {
+        if (elem != null) {
+            posts += elem.copy(id = lastID.getId())
             return posts.last()
         }
         throw PostNotFoundException()
     }
 
-    override fun update(post: Post): Boolean {
+    override fun update(elem: Post): Boolean {
         for ((index, target) in posts.withIndex()) {
-            if (target.id == post.id) {
-                posts[index] = post.copy(id = target.id, ownerID = target.ownerID, date = target.date)
+            if (target.id == elem.id) {
+                posts[index] = elem.copy(id = target.id, ownerID = target.ownerID, date = target.date)
                 return true
             }
         }
         return false
     }
 
-    private fun getId(): Int {
-        lastID += 1
-        return lastID
-    }
+//    private fun getId(): Int {
+//        lastID += 1
+//        return lastID.getId()
+//    }
 
     fun getAllPosts() {
         for (post in posts) {
@@ -76,9 +76,9 @@ object WallService : CrudService<Post> {
         }
     }
 
-    override fun delete(post: Post): Boolean {
+    override fun delete(elem: Post): Boolean {
         for (target in posts) {
-            if (post.id == target.id) {
+            if (elem.id == target.id) {
                 posts.remove(target)
                 return true
             }

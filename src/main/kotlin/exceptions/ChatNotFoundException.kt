@@ -1,4 +1,3 @@
 package exceptions
 
-class ChatNotFoundException : RuntimeException("Chat not found!") {
-}
+class ChatNotFoundException : RuntimeException("Chat not found!")

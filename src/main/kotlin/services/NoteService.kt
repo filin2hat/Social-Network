@@ -10,16 +10,17 @@ import interfaces.CrudService
 
 object NoteService : CrudService<Note> {
     private val notes = mutableListOf<Note>()
-    private var lastID = 0
+    private val getId = GenerateID()
+//    private var lastID = 0
 
-    private fun getId(): Int {
-        lastID += 1
-        return lastID
-    }
+//    private fun getId(): Int {
+//        lastID += 1
+//        return lastID
+//    }
 
     override fun add(note: Note?): Note {
         if (note != null) {
-            notes += note.copy(id = getId())
+            notes += note.copy(id = getId.getId())
             return notes.last()
         }
         throw NoteNotFoundException()
@@ -64,7 +65,7 @@ object NoteService : CrudService<Note> {
     fun addComment(noteId: Int, comments: Comments): Comments {
         for (note in notes) {
             if (note.id == noteId && !note.isDelete) {
-                note.comments += comments.copy(id = CommentsGenerateID.getId())
+                note.comments += comments.copy(id = getId.getId())
                 return note.comments.last()
             }
         }

@@ -10,5 +10,4 @@ data class Message(
     var isEdit: Boolean = false,
     val date: LocalDate = LocalDate.now(),
     val id: Int = 0
-) {
-}
+)

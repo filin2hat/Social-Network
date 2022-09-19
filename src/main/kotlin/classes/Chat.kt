@@ -8,5 +8,4 @@ data class Chat(
     val id: Int = 0,
     val date: LocalDate = LocalDate.now(),
     val messages: MutableList<Message> = mutableListOf()
-) {
-}
+)

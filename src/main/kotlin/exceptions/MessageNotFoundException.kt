@@ -1,4 +1,3 @@
 package exceptions
 
-class MessageNotFoundException : RuntimeException("Message not found!") {
-}
+class MessageNotFoundException : RuntimeException("Message not found!")

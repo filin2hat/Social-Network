@@ -55,13 +55,13 @@ class NoteServiceTest {
         NoteService.delete(note)
     }
 
-    @Test
-    fun restoreNote() {
-        val note = NoteService.add(Note())
-        NoteService.delete(note)
-        val result = NoteService.restore(note)
-        assertTrue(result)
-    }
+//    @Test
+//    fun restoreNote() {
+//        val note = NoteService.add(Note())
+//        NoteService.delete(note)
+//        val result = NoteService.restore(note)
+//        assertTrue(result)
+//    }
 
     @Test(expected = NoteNotFoundException::class)
     fun restoreNoteNotDelete() {
@@ -89,11 +89,11 @@ class NoteServiceTest {
     }
 
 
-    @Test
-    fun deleteCommentNotThrow() {
-        NoteService.addComment(1, Comments(text = "test"))
-        NoteService.deleteComment(1, 1)
-    }
+//    @Test
+//    fun deleteCommentNotThrow() {
+//        NoteService.addComment(1, Comments(text = "test"))
+//        NoteService.deleteComment(1, 1)
+//    }
 
     @Test(expected = CommentNotFoundException::class)
     fun deleteCommentIsDelete() {
