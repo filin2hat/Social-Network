@@ -9,6 +9,19 @@ object ChatService {
     private var chatId = GenerateID()
     private var messageId = GenerateID()
 
+    fun clear() {
+        chats.clear()
+        chatId = GenerateID()
+        messageId = GenerateID()
+    }
+
+    fun getChats(userId: Int): List<Chat> {
+        val result =
+            chats.filter { it.userId1 == userId || it.userId2 == userId }
+        if (result.isEmpty()) throw ChatNotFoundExceptions()
+        return result
+    }
+
     private fun getUsersChats(userId: Int) =
         chats.filter { (it.userId1 == userId || it.userId2 == userId) && it.messages.isNotEmpty() && !it.messages.last().isRead }
 
@@ -58,17 +71,28 @@ object ChatService {
         throw ChatNotFoundExceptions()
     }
 
-    fun getChats(userId: Int): List<Chat> {
-        val result =
-            chats.filter { it.userId1 == userId || it.userId2 == userId }
-        if (result.isEmpty()) throw ChatNotFoundExceptions()
-        return result
+    fun getChatById(userId: Int, chatId: Int): Chat {
+        val usersChat = getChats(userId)
+        for (chat in usersChat) {
+            if (chat.id == chatId)
+                return chat
+        }
+        throw ChatNotFoundExceptions()
     }
 
-    fun clear() {
-        chats.clear()
-        chatId = GenerateID()
-        messageId = GenerateID()
+    fun getUnreadChatsCount(userId: Int): Int {
+        var resultCount = 0
+        val resultChats = chats.filter {
+            (it.userId1 == userId || it.userId2 == userId)
+        }
+        if (resultChats.isEmpty()) return 0
+
+        for (chat in resultChats) {
+            for (massage in chat.messages) {
+                if (!massage.isRead && massage.toId == userId) resultCount++
+            }
+        }
+        return resultCount
     }
 }
 
