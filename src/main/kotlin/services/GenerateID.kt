@@ -1,6 +1,6 @@
 package services
 
-object ChatGenerateID {
+class GenerateID {
     private var lastId = 0
 
     fun getId() = ++lastId
