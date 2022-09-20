@@ -30,8 +30,8 @@ class ChatServiceTest {
         val user2 = UserService.add(User("Lena", "Petrova", 19))
         val text = "Hi"
         ChatService.addChat(user1.id, Chat(user1.id, user2.id), Message(user1.id, user2.id, text))
-        val result  = ChatService.addChat(user1.id, Chat(user1.id, user2.id), Message(user1.id, user2.id, text))
-        assertEquals(1 , result.id)
+        val result = ChatService.addChat(user1.id, Chat(user1.id, user2.id), Message(user1.id, user2.id, text))
+        assertEquals(4, result.id)
     }
 
     @Test

@@ -17,8 +17,7 @@ object ChatService {
     }
 
     fun getChats(userId: Int): List<Chat> {
-        val result =
-            chats.filter { it.userId1 == userId || it.userId2 == userId }
+        val result = chats.filter { it.userId1 == userId || it.userId2 == userId }
         if (result.isEmpty()) throw ChatNotFoundException()
         return result
     }
@@ -27,157 +26,87 @@ object ChatService {
         chats.filter { (it.userId1 == userId || it.userId2 == userId) && it.messages.isNotEmpty() && !it.messages.last().isRead }
 
     fun addChat(userId: Int, newChat: Chat, message: Message): Chat {
-        val userChat = getUsersChats(userId)
-        for (chat in userChat) {
-            if ((chat.userId1 == newChat.userId1 && chat.userId2 == newChat.userId2) ||
-                (chat.userId1 == newChat.userId2 && chat.userId2 == newChat.userId1)
-            ) {
-                chat.messages += message.copy(id = messageId.getId())
-                return chat
-            }
+        val chat = getUsersChats(userId).find {
+            (it.userId1 == newChat.userId1 && it.userId2 == newChat.userId1) ||
+                    (it.userId1 == newChat.userId2 && it.userId2 == newChat.userId1)
         }
-        newChat.messages += message.copy(id = messageId.getId())
-        chats += newChat.copy(id = chatId.getId(), userId1 = message.fromId, userId2 = message.toId)
-        return chats.last()
+        return if (chat != null) {
+            chat.messages += message.copy(id = messageId.getId())
+            chat
+        } else {
+            newChat.messages += message.copy(id = messageId.getId())
+            chats += newChat.copy(id = messageId.getId(), userId1 = message.fromId, userId2 = message.toId)
+            chats.last()
+        }
     }
 
     fun deleteChat(userId: Int, chatId: Int): Boolean {
-        val usersChat = getUsersChats(userId)
-        for (chat in ArrayList(usersChat)) {
-            if (chat.id == chatId) {
-                if (chat.messages.isNotEmpty()) {
-                    for (message in ArrayList(chat.messages)) {
-                        chat.messages.remove(message)
-                    }
-                }
-                chats.remove(chat)
-                return true
-            }
-        }
-        throw ChatNotFoundException()
+        val chat = getChats(userId).find { it.id == chatId } ?: throw ChatNotFoundException()
+        chat.messages.clear()
+        chats.remove(chat)
+        return true
     }
 
     fun editChat(userId: Int, chatId: Int, chat: Chat): Boolean {
-        val usersChat = getUsersChats(userId)
-        for ((index, thisChat) in usersChat.withIndex()) {
-            if (thisChat.id == chatId) {
-                chats[index] = chat.copy(
-                    userId1 = thisChat.userId1,
-                    userId2 = thisChat.userId2,
-                    date = thisChat.date
-                )
-                return true
-            }
-        }
-        throw ChatNotFoundException()
+        val thisChat = getChats(userId).find { it.id == chatId } ?: throw ChatNotFoundException()
+        chats[chats.indexOf(thisChat)] = chat.copy(
+            id = thisChat.id,
+            userId1 = thisChat.userId1,
+            userId2 = thisChat.userId2,
+            date = thisChat.date
+        )
+        return true
     }
 
-    fun getChatById(userId: Int, chatId: Int): Chat {
-        val usersChat = getUsersChats(userId)
-        for (chat in usersChat) {
-            if (chat.id == chatId)
-                return chat
-        }
-        throw ChatNotFoundException()
-    }
+    fun getChatById(userId: Int, chatId: Int) =
+        getChats(userId).find { it.id == chatId } ?: throw ChatNotFoundException()
 
-    fun getUnreadChatsCount(userId: Int): Int {
-        var resultCount = 0
-        val resultChats = chats.filter {
-            (it.userId1 == userId || it.userId2 == userId)
-        }
-        if (resultChats.isEmpty()) return 0
 
-        for (chat in resultChats) {
-            for (massage in chat.messages) {
-                if (!massage.isRead && massage.toId == userId) resultCount++
-            }
-        }
-        return resultCount
-    }
+    fun getUnreadChatsCount(userId: Int) = chats
+        .filter { (it.userId1 == userId || it.userId2 == userId) }
+        .count { chat -> chat.messages.any { !it.isRead && it.toId == userId } }
 
     fun addMessage(userId: Int, chatId: Int, message: Message): Message {
-        val usersChat = getUsersChats(userId)
-        for (chat in usersChat) {
-            if (chat.id == chatId) {
-                chat.messages += message.copy(id = messageId.getId())
-                return chat.messages.last()
-            }
-        }
-        throw ChatNotFoundException()
+        val chat = getChats(userId).find { it.id == chatId } ?: throw ChatNotFoundException()
+        chat.messages += message.copy(id = messageId.getId())
+        return chat.messages.last()
     }
 
-    fun deleteMessage(userId: Int, chatId: Int, massageId: Int): Boolean {
-        val usersChat = getUsersChats(userId)
-        for (chat in usersChat) {
-            if (chat.id == chatId) {
-                for (message in ArrayList(chat.messages)) {
-                    if (message.id == massageId) {
-                        chat.messages.remove(message)
-                        if (chat.messages.isEmpty()) deleteChat(userId, chatId)
-                        return true
-                    }
-                }
-                throw MessageNotFoundException()
-            }
-        }
-        throw ChatNotFoundException()
+    fun deleteMessage(userId: Int, chatId: Int, messageId: Int): Boolean {
+        val chat = getChats(userId).find { it.id == chatId } ?: throw ChatNotFoundException()
+        val message = chat.messages.find { it.id == messageId } ?: throw MessageNotFoundException()
+        chat.messages.remove(message)
+        if (chat.messages.isEmpty()) deleteChat(userId, chatId)
+        return true
     }
 
     fun editMessage(userId: Int, chatId: Int, messageId: Int, message: Message): Boolean {
-        val usersChat = getUsersChats(userId)
-        for (chat in usersChat) {
-            if (chat.id == chatId) {
-                for ((index, thisMessage) in chat.messages.withIndex()) {
-                    if (thisMessage.id == messageId) {
-                        chat.messages[index] = message.copy(
-                            id = thisMessage.id,
-                            fromId = thisMessage.fromId,
-                            toId = thisMessage.toId,
-                            isEdit = true,
-                            date = thisMessage.date
-                        )
-                        return true
-                    }
-                }
-                throw MessageNotFoundException()
-            }
-        }
-        throw ChatNotFoundException()
+        val chat = getChats(userId).find { it.id == chatId } ?: throw ChatNotFoundException()
+        val thisMessage = chat.messages.find { it.id == messageId } ?: throw MessageNotFoundException()
+        chat.messages[chat.messages.indexOf(thisMessage)] = message.copy(
+            id = thisMessage.id,
+            fromId = thisMessage.fromId,
+            toId = thisMessage.toId,
+            isEdit = true,
+            date = thisMessage.date
+        )
+        return true
     }
 
     fun getMessages(userId: Int, chatId: Int, lastMessageId: Int, countOfMessages: Int): List<Message> {
-        val usersChat = getUsersChats(userId)
-        for (chat in usersChat) {
-            if (chat.id == chatId) {
-                for (message in chat.messages) {
-                    if (message.id == lastMessageId) {
-                        val firstIndex = chat.messages.indexOf(message)
-                        val lastIndex =
-                            if ((firstIndex + countOfMessages - 1) > chat.messages.size) chat.messages.size else (firstIndex + countOfMessages - 1)
-                        val result = chat.messages.filterIndexed { index, _ -> index in firstIndex..lastIndex }
-                        result.forEach { it.isRead = true }
-                        return result
-                    }
-                }
-                throw MessageNotFoundException()
-            }
-        }
-        throw ChatNotFoundException()
+        val chat = getChats(userId).find { it.id == chatId } ?: throw ChatNotFoundException()
+        val lastMessage = chat.messages.find { it.id == lastMessageId } ?: throw MessageNotFoundException()
+        val firstIndex = chat.messages.indexOf(lastMessage)
+        val lastIndex =
+            if ((firstIndex + countOfMessages - 1) > chat.messages.size) chat.messages.size else (firstIndex + countOfMessages - 1)
+        val result = chat.messages.filterIndexed { index, _ -> index in firstIndex..lastIndex }
+        result.forEach { it.isRead = true }
+        return result
     }
 
     fun getMessageById(userId: Int, chatId: Int, messageId: Int): Message {
-        val usersChat = getUsersChats(userId)
-        for (chat in usersChat) {
-            if (chat.id == chatId) {
-                for (message in chat.messages) {
-                    if (message.id == messageId)
-                        return message
-                }
-                throw MessageNotFoundException()
-            }
-        }
-        throw ChatNotFoundException()
+        val chat = getChats(userId).find { it.id == chatId } ?: throw ChatNotFoundException()
+        return chat.messages.find { it.id == messageId } ?: throw MessageNotFoundException()
     }
 }
 

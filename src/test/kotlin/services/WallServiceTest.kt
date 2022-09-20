@@ -3,6 +3,7 @@ package services
 import classes.Comments
 import classes.Post
 import classes.Report
+import classes.main
 import exceptions.CommentNotFoundException
 import exceptions.PostNotFoundException
 import exceptions.UnknownReasonException
@@ -13,6 +14,10 @@ import services.WallService.getAllPosts
 
 
 class WallServiceTest {
+    @Test
+    fun testMain() {
+        main()
+    }
 
     @Test
     fun reportShouldNotThrow() {
@@ -99,9 +104,7 @@ class WallServiceTest {
     fun printPostTrue() {
         val post = WallService.add(Post())
         WallService.print(post)
-        }
-
-
+    }
 
 
     @Test(expected = PostNotFoundException::class)
