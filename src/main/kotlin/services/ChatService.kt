@@ -125,8 +125,8 @@ fun getChatById(userId: Int, chatId: Int) =
 //        if (resultChats.isEmpty()) return 0
 //
 //        for (chat in resultChats) {
-//            for (massage in chat.messages) {
-//                if (!massage.isRead && massage.toId == userId) resultCount++
+//            for (message in chat.messages) {
+//                if (!message.isRead && message.toId == userId) resultCount++
 //            }
 //        }
 //        return resultCount
@@ -146,18 +146,18 @@ fun getChatById(userId: Int, chatId: Int) =
 //        }
 //        throw ChatNotFoundException()
 //    }
-fun addMassage(userId: Int, chatId: Int, message: Message): Message {
+fun addMessage(userId: Int, chatId: Int, message: Message): Message {
     val chat = getChats(userId).find { it.id == chatId } ?: throw ChatNotFoundException()
     chat.messages += message.copy(id = messageId.getId())
     return chat.messages.last()
 }
 
-//    fun deleteMessage(userId: Int, chatId: Int, massageId: Int): Boolean {
+//    fun deleteMessage(userId: Int, chatId: Int, messageId: Int): Boolean {
 //        val usersChat = getUsersChats(userId)
 //        for (chat in usersChat) {
 //            if (chat.id == chatId) {
 //                for (message in ArrayList(chat.messages)) {
-//                    if (message.id == massageId) {
+//                    if (message.id == messageId) {
 //                        chat.messages.remove(message)
 //                        if (chat.messages.isEmpty()) deleteChat(userId, chatId)
 //                        return true
@@ -168,10 +168,10 @@ fun addMassage(userId: Int, chatId: Int, message: Message): Message {
 //        }
 //        throw ChatNotFoundException()
 //    }
-fun deleteMassage(userId: Int, chatId: Int, massageId: Int): Boolean {
+fun deleteMessage(userId: Int, chatId: Int, messageId: Int): Boolean {
     val chat = getChats(userId).find { it.id == chatId } ?: throw ChatNotFoundException()
-    val massage = chat.messages.find { it.id == massageId } ?: throw MessageNotFoundException()
-    chat.messages.remove(massage)
+    val message = chat.messages.find { it.id == messageId } ?: throw MessageNotFoundException()
+    chat.messages.remove(message)
     if (chat.messages.isEmpty()) deleteChat(userId, chatId)
     return true
 }
@@ -197,15 +197,15 @@ fun deleteMassage(userId: Int, chatId: Int, massageId: Int): Boolean {
 //        }
 //        throw ChatNotFoundException()
 //    }
-fun editMassage(userId: Int, chatId: Int, massageId: Int, massage: Message): Boolean {
+fun editMessage(userId: Int, chatId: Int, messageId: Int, message: Message): Boolean {
     val chat = getChats(userId).find { it.id == chatId } ?: throw ChatNotFoundException()
-    val thisMassage = chat.messages.find { it.id == massageId } ?: throw MessageNotFoundException()
-    chat.messages[chat.messages.indexOf(thisMassage)] = massage.copy(
-        id = thisMassage.id,
-        fromId = thisMassage.fromId,
-        toId = thisMassage.toId,
+    val thisMessage = chat.messages.find { it.id == messageId } ?: throw MessageNotFoundException()
+    chat.messages[chat.messages.indexOf(thisMessage)] = message.copy(
+        id = thisMessage.id,
+        fromId = thisMessage.fromId,
+        toId = thisMessage.toId,
         isEdit = true,
-        date = thisMassage.date
+        date = thisMessage.date
     )
     return true
 }
@@ -229,10 +229,10 @@ fun editMassage(userId: Int, chatId: Int, massageId: Int, massage: Message): Boo
 //        }
 //        throw ChatNotFoundException()
 //    }
-fun getMassages(userId: Int, chatId: Int, lastMessageId: Int, countOfMessages: Int): List<Message> {
+fun getMessages(userId: Int, chatId: Int, lastMessageId: Int, countOfMessages: Int): List<Message> {
     val chat = getChats(userId).find { it.id == chatId } ?: throw ChatNotFoundException()
-    val lastMassage = chat.messages.find { it.id == lastMessageId } ?: throw MessageNotFoundException()
-    val firstIndex = chat.messages.indexOf(lastMassage)
+    val lastMessage = chat.messages.find { it.id == lastMessageId } ?: throw MessageNotFoundException()
+    val firstIndex = chat.messages.indexOf(lastMessage)
     val lastIndex =
         if ((firstIndex + countOfMessages - 1) > chat.messages.size) chat.messages.size else (firstIndex + countOfMessages - 1)
     val result = chat.messages.filterIndexed { index, _ -> index in firstIndex..lastIndex }
@@ -254,7 +254,7 @@ fun getMassages(userId: Int, chatId: Int, lastMessageId: Int, countOfMessages: I
 //        throw ChatNotFoundException()
 //    }
 
-    fun getMassageById(userId: Int, chatId: Int, messageId: Int): Message {
+    fun getMessageById(userId: Int, chatId: Int, messageId: Int): Message {
         val chat = getChats(userId).find { it.id == chatId } ?: throw ChatNotFoundException()
         return chat.messages.find { it.id == messageId } ?: throw MessageNotFoundException()
     }
